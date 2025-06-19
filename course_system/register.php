@@ -1,11 +1,17 @@
 <?php
 require 'db.php';
-session_start();
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST["email"];
-    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
-    $stmt->execute([$email, $password]);
+    $password = $_POST["password"];
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT); // ✅ 正確拼法
+
+    // 預設角色為 user
+    $role = "user";
+
+    $stmt = $pdo->prepare("INSERT INTO users (email, password, role) VALUES (?, ?, ?)");
+    $stmt->execute([$email, $hashed_password, $role]);
+
     header("Location: login.php");
     exit();
 }

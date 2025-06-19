@@ -8,8 +8,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute([$email]);
     $user = $stmt->fetch();
     if ($user && password_verify($password, $user["password"])) {
-        $_SESSION["user_id"] = $user["id"];
+        $_SESSION["user_id"] = $user["users_id"];
         $_SESSION["email"] = $user["email"];
+        $_SESSION["role"] = $user["role"];
         header("Location: index.php");
         exit();
     } else {
